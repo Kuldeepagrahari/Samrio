@@ -1,4 +1,5 @@
 # 🌙 Samrio — Zero Distance Celebrations
+<img width="1873" height="897" alt="image" src="https://github.com/user-attachments/assets/9f64a2bf-bddf-4fba-8f8e-d3cbbf155b07" />
 
 > **Distance is a technicality.**  
 > Samrio is a high-fidelity, private virtual space designed for couples in long-distance relationships to celebrate milestones, cultural festivals, and daily rituals together in real time.
