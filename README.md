@@ -46,4 +46,42 @@
 ---
 
 ## 📁 Project Structure (Client)
+client/
+├── src/
+│ ├── components/
+│ ├── pages/
+│ ├── animations/
+│ ├── hooks/
+│ ├── styles/
+│ └── main.tsx
+├── public/
+├── index.html
+├── tailwind.config.ts
+├── vite.config.ts
+└── tsconfig.json
 
+🧠 Design Philosophy
+
+Samrio is built on three core principles:
+
+Presence over productivity – shared moments matter more than features
+
+Emotion-driven UI – animation and color guide feeling, not distraction
+
+Privacy by default – spaces are intimate, intentional, and ephemeral
+
+📌 Roadmap
+
+🔐 End-to-end encrypted ritual rooms
+
+🎶 Synchronized music & ambience
+
+🕯️ Real-time festival countdowns
+
+📱 PWA + mobile-first optimizations
+
+📄 License
+
+This project is licensed under the MIT License.
+
+“Love doesn’t need proximity. It needs presence.” 🌙
