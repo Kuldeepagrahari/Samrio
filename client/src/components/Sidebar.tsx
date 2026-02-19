@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import LogoutModal from './LogoutModal';
 import { 
-  Heart, Calendar, Sparkles, Gift, 
-  ChevronDown, ChevronRight, Moon, Star, 
-  Home, Cake, Camera
+  Heart, Calendar, Gift, ChevronDown, ChevronRight, Moon, Home 
 } from 'lucide-react';
 
 interface SubItem {
@@ -21,11 +20,14 @@ interface NavCategory {
 interface SidebarProps {
   activeRitual: string;
   setActiveRitual: (id: string) => void;
+  onLogout: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeRitual, setActiveRitual }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeRitual, setActiveRitual, onLogout }) => {
   const [openCategory, setOpenCategory] = useState<string | null>('valentine');
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
+  // The complete list of all Samrio celebrations
   const navigation: NavCategory[] = [
     {
       id: 'valentine',
@@ -68,83 +70,86 @@ const Sidebar: React.FC<SidebarProps> = ({ activeRitual, setActiveRitual }) => {
   ];
 
   return (
-    <aside className="w-72 h-screen bg-black border-r border-white/5 flex flex-col z-50">
-      {/* Brand Section */}
-      <div className="p-8 flex items-center gap-3 border-b border-white/5">
-      <img src="/full_logo.png" alt="logo" className='h-9 w-auto' />
-      </div>
-
-      {/* Main Home Link */}
-      <button 
-        onClick={() => setActiveRitual('home')}
-        className={`mx-4 mt-6 flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-          activeRitual === 'home' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'
-        }`}
-      >
-        <Home size={18} />
-        <span className="text-sm font-medium">Dashboard</span>
-      </button>
-
-      {/* Navigation Groups */}
-      <nav className="flex-1 px-4 mt-4 space-y-2 overflow-y-auto custom-scrollbar">
-        {navigation.map((cat) => (
-          <div key={cat.id} className="mb-2">
-            <button
-              onClick={() => setOpenCategory(openCategory === cat.id ? null : cat.id)}
-              className="w-full flex items-center justify-between px-4 py-3 text-slate-500 hover:text-slate-200 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                {cat.icon}
-                <span className="text-xs font-bold uppercase tracking-widest">{cat.label}</span>
-              </div>
-              {openCategory === cat.id ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-            </button>
-
-            <AnimatePresence>
-              {openCategory === cat.id && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="ml-6 border-l border-white/10 overflow-hidden"
-                >
-                  {cat.items.map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveRitual(item.id)}
-                      className={`w-full text-left px-6 py-2 text-sm mt-1 transition-all relative ${
-                        activeRitual === item.id 
-                        ? 'text-[#FF5885] font-semibold' 
-                        : 'text-slate-500 hover:text-slate-300'
-                      }`}
-                    >
-                      {activeRitual === item.id && (
-                        <motion.div 
-                          layoutId="activeGlow"
-                          className="absolute left-0 w-1 h-4 bg-[#FF5885] rounded-full shadow-[0_0_10px_#FF5885]"
-                        />
-                      )}
-                      {item.label}
-                    </button>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ))}
-      </nav>
-
-      {/* Bottom Profile Info */}
-      <div className="p-6 border-t border-white/5 bg-white/[0.01]">
-        <div className="flex items-center gap-3 px-2">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#FF5885] to-rose-900 border border-white/20" />
-          <div className="flex flex-col">
-            <span className="text-xs font-bold">Kuldeep</span>
-            <span className="text-[10px] text-slate-500">Partner: Aditi</span>
-          </div>
+    <>
+      <aside className="w-72 h-screen bg-black border-r border-white/5 flex flex-col z-50">
+        {/* Brand Section -> Triggers Logout Modal */}
+        <div 
+          className="p-8 flex items-center gap-3 border-b border-white/5 cursor-pointer hover:bg-white/[0.02] transition-colors"
+          onClick={() => setShowLogoutConfirm(true)}
+        >
+          <img src="/full_logo.png" alt="Samrio Logo" className="h-9 w-auto" />
         </div>
-      </div>
-    </aside>
+
+        {/* Dashboard Link */}
+        <button 
+          onClick={() => setActiveRitual('home')}
+          className={`mx-4 mt-6 flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+            activeRitual === 'home' ? 'bg-[#FF5885]/10 text-[#FF5885] font-bold' : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          <Home size={18} />
+          <span className="text-sm">Dashboard</span>
+        </button>
+
+        {/* Navigation Categories */}
+        <nav className="flex-1 px-4 mt-4 space-y-2 overflow-y-auto custom-scrollbar pb-6">
+          {navigation.map((cat) => (
+            <div key={cat.id} className="mb-2">
+              <button
+                onClick={() => setOpenCategory(openCategory === cat.id ? null : cat.id)}
+                className="w-full flex items-center justify-between px-4 py-3 text-slate-500 hover:text-slate-200 transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  {cat.icon}
+                  <span className="text-xs font-bold uppercase tracking-widest">{cat.label}</span>
+                </div>
+                {openCategory === cat.id ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+              </button>
+
+              <AnimatePresence>
+                {openCategory === cat.id && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="ml-6 border-l border-white/10 overflow-hidden"
+                  >
+                    {cat.items.map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => setActiveRitual(item.id)}
+                        className={`w-full text-left px-6 py-2 text-sm mt-1 transition-all relative ${
+                          activeRitual === item.id 
+                          ? 'text-[#FF5885] font-semibold' 
+                          : 'text-slate-500 hover:text-slate-300'
+                        }`}
+                      >
+                        {activeRitual === item.id && (
+                          <motion.div 
+                            layoutId="activeGlow"
+                            className="absolute left-0 w-1 h-4 bg-[#FF5885] rounded-full shadow-[0_0_10px_#FF5885]"
+                          />
+                        )}
+                        {item.label}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
+        </nav>
+      </aside>
+
+      <LogoutModal 
+        isOpen={showLogoutConfirm} 
+        onConfirm={() => {
+          setShowLogoutConfirm(false);
+          onLogout();
+        }} 
+        onCancel={() => setShowLogoutConfirm(false)} 
+      />
+    </>
   );
 };
 
